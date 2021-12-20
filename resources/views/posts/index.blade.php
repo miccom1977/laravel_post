@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="card-body">
-            <table class="table">
+            <table class="table table-striped table-dark">
                 <thead>
                 <tr>
                     <th scope="col">Post Title</th>
@@ -26,8 +26,8 @@
 
         </div>
 
-        <div class="card-footer">
-            {{ $posts->links() }}
+        <div class="d-flex">
+            {!! $posts->links() !!}
         </div>
     </div>
 @endsection
