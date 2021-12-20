@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostsTable extends Migration
+class CreatePostsCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,8 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('posts_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255);
-            $table->string('description', 255);
             $table->timestamps();
         });
     }
@@ -30,7 +28,7 @@ class CreatePostsTable extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('posts_categories');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
