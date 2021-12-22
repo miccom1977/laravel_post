@@ -16,9 +16,6 @@ use App\Http\Controllers\{
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [PostController::class,'index']);
 Route::resource('posts', PostController::class)->name('profile','posts');
-Route::resource(' categories', CategoryController::class)->name('profile','categories');
+Route::resource('categories', CategoryController::class)->name('profile','categories');

@@ -12,10 +12,10 @@
                 <tbody>
                     @foreach($posts as $singlePost)
                     <tr>
-                        <td>{{ $singlePost->title }}</td>
+                        <td><a href="posts/{{ $singlePost->id }}/edit">{{ $singlePost->title }}</a></td>
                         <td>
                             @foreach( $singlePost->categories as $singleCategory )
-                            {{ $singleCategory->title }}
+                                {{ $singleCategory->title }}<br>
                             @endforeach
                         </td>
                         <td>{{ $singlePost->description }}</td>
@@ -23,9 +23,7 @@
                 @endforeach
                 </tbody>
             </table>
-
         </div>
-
         <div class="d-flex">
             {!! $posts->links() !!}
         </div>

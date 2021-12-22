@@ -18,4 +18,5 @@ class PostsCategoriesFactory extends Factory
             'category_id' => rand(1,10),
         ];
     }
+
 }

@@ -24,7 +24,27 @@
     </head>
     <body>
         <div>
-            <div class="container-lg">
+            <div class="container-lg w-50 p-3 mx-auto">
+                <a href="../posts">Show all post</a> |
+                <a href="../posts/create">Create new post</a> |
+                <a href="../categories/create">Create new category</a>
+
+
+                @if(Session::has('success'))
+                    <div class="alert alert-success">
+                        {{Session::get('success')}}
+                    </div>
+                @endif
+                @if(Session::has('error'))
+                    <div class="alert alert-error">
+                        {{Session::get('error')}}
+                    </div>
+                @endif
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div>{{$error}}</div>
+                    @endforeach
+                @endif
                 @yield('content')
             </div>
         </div>
