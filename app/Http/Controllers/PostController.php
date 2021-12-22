@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Services\PostService;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class PostController extends Controller
 {
@@ -59,6 +59,12 @@ class PostController extends Controller
             );
             //add categories to post
             $this->postService->addCategories( $post->id, $request->categories );
+
+            // add post to cache
+            $cachedPost = Redis::get('post_' . $post->id);
+            if(!isset($cachedPost)) {
+                Redis::set('post_' . $post->id, $post);
+            }
         });
         return redirect('posts')->with('success', 'New Post added.');
     }
@@ -67,24 +73,41 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        $categories = Category::all();
+        $post->load('categories');
+        $postCategories = $this->postService->getArrayCategories( $post->categories );
+        return view('posts.edit', compact('post','categories','postCategories'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\UpdatePostRequest  $request
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        DB::transaction(function ()  use ($request, $post)
+        {
+            $post->update([
+                'title' => $request->title,
+                'description' => $request->description,
+            ]);
+            $this->postService->addCategories( $post->id, $request->categories );
+
+            // dell post to cache
+            Redis::del('post_' . $post->id);
+            // Set a new key with the id
+            Redis::set('post_' . $post->id, $post);
+
+        });
+        return redirect('posts')->with('success', 'Post correctly edited.');
     }
 
 }
