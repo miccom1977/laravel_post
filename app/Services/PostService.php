@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\PostsCategories;
-use Illuminate\Support\Facades\Redis;
 
 class PostService {
 
@@ -35,9 +34,7 @@ class PostService {
 
     public function getAllPosts()
     {
-
         $posts = Post::all();
-
       return response()->json($posts, 200);
   }
 }
